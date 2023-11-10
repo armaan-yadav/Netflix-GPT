@@ -3,6 +3,12 @@ import Header from "../header/Header";
 import Button from "../../utils/buttons/Button";
 import { Link, useResolvedPath } from "react-router-dom";
 import { isEmailValid, isPasswordValid } from "../../utils/validation";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../../utils/Firebase";
 const SignIn = ({ signIn }) => {
   const [showPassword, setShowPassword] = useState("password");
   //handling signIn/signOut
@@ -34,16 +40,49 @@ const SignIn = ({ signIn }) => {
     };
   });
 
-
   //validation email and password to make sure they're written in correct order
   const emailRef = useRef();
   const passRef = useRef();
+  const nameRef = useRef();
   const [emailError, setEmailError] = useState();
   const [passError, setPassError] = useState();
 
   const handleSubmit = () => {
     setEmailError(isEmailValid(emailRef.current.value));
     setPassError(isPasswordValid(passRef.current.value));
+    console.log(emailError, passError);
+    if (emailError || passError) return;
+    console.log("hehe");
+    if (!isSignIn) {
+      // signIn
+      createUserWithEmailAndPassword(
+        auth,
+        emailRef.current.value,
+        passRef.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          user.displayName = nameRef.current.value;
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          setPassError(errorMessage);
+        });
+    } else {
+      // signUp
+      signInWithEmailAndPassword(
+        auth,
+        emailRef.current.value,
+        passRef.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          setPassError(errorMessage);
+        });
+    }
   };
 
   return (
@@ -61,7 +100,6 @@ const SignIn = ({ signIn }) => {
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSubmit();
-                console.log(e);
               }}
               className="flex flex-col gap-5"
             >
@@ -71,6 +109,7 @@ const SignIn = ({ signIn }) => {
 
               {!isSignIn && (
                 <input
+                  ref={nameRef}
                   type="text"
                   placeholder="Name"
                   className="outline-none px-5 bg-secondaryTwo text-white text-md h-[3rem] rounded-lg focus:bg-[rgb(69,69,69)] duration-200"
@@ -107,9 +146,9 @@ const SignIn = ({ signIn }) => {
                   </button>
                 )}
               </div>
-                {passError && (
-                  <h1 className="text-[.7rem] text-primary">{passError}</h1>
-                )}
+              {passError && (
+                <h1 className="text-[.7rem] text-primary">{passError}</h1>
+              )}
               <button type="submit w-full">
                 <Button
                   text={isSignIn ? "Sign In" : "Sign Up"}
