@@ -1,17 +1,22 @@
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { useRef, useState, useEffect, Children } from "react";
 import Header from "../header/Header";
 import Button from "../../utils/buttons/Button";
-import { Link, useResolvedPath } from "react-router-dom";
+import { Link, useNavigate, useResolvedPath } from "react-router-dom";
 import { isEmailValid, isPasswordValid } from "../../utils/validation";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { addUser } from "../../utils/userSlice";
+import { useDispatch } from "react-redux";
 import { auth } from "../../utils/Firebase";
+
+
 const SignIn = ({ signIn }) => {
   const [showPassword, setShowPassword] = useState("password");
-  //handling signIn/signOut
+  const navigate = useNavigate();
+  //checking signIn/signOut
   const [isSignIn, setIsSignIn] = useState(true);
 
   const handleIsSignIn = () => {
@@ -47,6 +52,7 @@ const SignIn = ({ signIn }) => {
   const [emailError, setEmailError] = useState();
   const [passError, setPassError] = useState();
 
+  const dispatcher = useDispatch();
   const handleSubmit = () => {
     setEmailError(isEmailValid(emailRef.current.value));
     setPassError(isPasswordValid(passRef.current.value));
@@ -54,15 +60,24 @@ const SignIn = ({ signIn }) => {
     if (emailError || passError) return;
     console.log("hehe");
     if (!isSignIn) {
-      // signIn
+      // signUp
       createUserWithEmailAndPassword(
         auth,
         emailRef.current.value,
         passRef.current.value
       )
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           const user = userCredential.user;
-          user.displayName = nameRef.current.value;
+          // user.displayName = nameRef.current.value;
+
+          await updateProfile(userCredential.user, {
+            displayName: nameRef.current.value,
+          }).then(() => {
+            const { displayName, email, uid } = auth.currentUser;
+            dispatcher(addUser({ displayName, email, uid }));
+          });
+          addUser(user);
+          navigate("/browse");
         })
         .catch((error) => {
           const errorMessage = error.message;
@@ -77,6 +92,8 @@ const SignIn = ({ signIn }) => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
+          navigate("/browse");
+          addUser(user);
         })
         .catch((error) => {
           const errorMessage = error.message;
@@ -137,7 +154,8 @@ const SignIn = ({ signIn }) => {
                 />
                 {showPasswordBtn && (
                   <button
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
                       handleShowPassword();
                     }}
                     className="text-slate-400 absolute right-1 h-full"
