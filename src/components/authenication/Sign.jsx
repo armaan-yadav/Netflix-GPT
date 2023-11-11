@@ -3,17 +3,16 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { useRef, useState, useEffect, Children } from "react";
+import { useRef, useState, useEffect } from "react";
 import Header from "../header/Header";
 import Button from "../../utils/buttons/Button";
-import { Link, useNavigate, useResolvedPath } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { isEmailValid, isPasswordValid } from "../../utils/validation";
 import { addUser } from "../../utils/userSlice";
 import { useDispatch } from "react-redux";
 import { auth } from "../../utils/Firebase";
 
-
-const SignIn = ({ signIn }) => {
+const SignIn = ({}) => {
   const [showPassword, setShowPassword] = useState("password");
   const navigate = useNavigate();
   //checking signIn/signOut
@@ -33,9 +32,9 @@ const SignIn = ({ signIn }) => {
 
   //making the show button disappear whenever we click outside  the input password field //
   const passwordRef = useRef(null);
+
   const handleShowPasswordBtn = (event) => {
-    if (!passwordRef.current.contains(event.target))
-      setShowPasswordBtn(!showPasswordBtn);
+    if (!passwordRef.current.contains(event.target)) setShowPasswordBtn(false);
   };
   useEffect(() => {
     document.addEventListener("click", handleShowPasswordBtn);
@@ -156,7 +155,8 @@ const SignIn = ({ signIn }) => {
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      handleShowPassword();
+                      handleShowPassword(e);
+                      changeText(e);
                     }}
                     className="text-slate-400 absolute right-1 h-full"
                   >
