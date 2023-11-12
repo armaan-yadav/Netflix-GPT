@@ -32,10 +32,10 @@ function App() {
     if (user) {
       const { displayName, email, uid } = user;
       dispatcher(addUser({ displayName, email, uid }));
-      console.log("logged In");
+      // console.log("logged In");
     } else {
       dispatcher(removeUser());
-      console.log("logged Out");
+      // console.log("logged Out");
     }
   });
   return (

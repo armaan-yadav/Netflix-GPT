@@ -6,9 +6,7 @@ import appStore from "./utils/appStore";
 import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <Provider store={appStore}>
-      <App />
-    </Provider>
-  </React.StrictMode>
+  <Provider store={appStore}>
+    <App />
+  </Provider>
 );

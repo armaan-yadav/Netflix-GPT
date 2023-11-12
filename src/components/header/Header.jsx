@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { auth } from "../../utils/Firebase";
 import { useSelector } from "react-redux";
-const Header = ({ signIn, children }) => {
+const Header = ({ signIn, children, style }) => {
   const isSignedIn = useSelector((state) => state.user);
   const navigate = useNavigate();
   const handleSignOut = () => {
@@ -20,7 +20,9 @@ const Header = ({ signIn, children }) => {
   const user = useSelector((state) => state.user);
 
   return (
-    <div className="w-full h-[80px] max-sm:h-[90px] flex justify-between px-[10rem] max-sm:px-[1rem]  items-center absolute top-0">
+    <div
+      className={`w-full h-[80px] max-sm:h-[90px] flex justify-between px-[10rem] max-sm:px-[1rem]  items-center absolute top-0 ${style}`}
+    >
       <img
         src={Logo}
         alt="logo"

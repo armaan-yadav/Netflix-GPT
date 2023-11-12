@@ -55,9 +55,9 @@ const SignIn = ({}) => {
   const handleSubmit = () => {
     setEmailError(isEmailValid(emailRef.current.value));
     setPassError(isPasswordValid(passRef.current.value));
-    console.log(emailError, passError);
+    // console.log(emailError, passError);
     if (emailError || passError) return;
-    console.log("hehe");
+    // console.log("hehe");
     if (!isSignIn) {
       // signUp
       createUserWithEmailAndPassword(
