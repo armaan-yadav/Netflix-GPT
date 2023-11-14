@@ -10,7 +10,7 @@ const VideoBackground = ({ id, isMuted }) => {
   const trailer = useSelector((state) => state?.movies?.trailerVideo);
   // console.log(trailer);
   return (
-    <div className="h-[100vh] w-full overflow-hidden z-[5] pointer-events-none">
+    <div className="h-[100vh] w-full overflow-hidden z-[0] pointer-events-none relative">
       <ReactPlayer
         url={YT_LINK + trailer?.key}
         width={"100%"}
@@ -19,7 +19,7 @@ const VideoBackground = ({ id, isMuted }) => {
         volume={1}
         muted={isMuted}
         loop={true}
-        className={"scale-[1.2]"}
+        className={"scale-[1.4]"}
       />
     </div>
   );

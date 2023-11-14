@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Logo from "../../assets/images/NetFlix-Logo.png";
 import Button from "../../utils/buttons/Button";
 import { Link, useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ const Header = ({ signIn, children, style }) => {
 
   return (
     <div
-      className={`w-full h-[80px] max-sm:h-[90px] flex justify-between px-[10rem] max-sm:px-[1rem]  items-center absolute top-0 ${style}`}
+      className={`w-full h-[80px] max-sm:h-[90px] flex justify-between px-[2rem] max-sm:px-[1rem]  items-center absolute top-0 ${style}`}
     >
       <img
         src={Logo}

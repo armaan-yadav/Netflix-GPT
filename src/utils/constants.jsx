@@ -8,3 +8,5 @@ export const API_OPTIONS = {
 };
 
 export const YT_LINK = `https://www.youtube.com/watch?v=`;
+
+export const IMG_CDN = `https://image.tmdb.org/t/p/w500/`;

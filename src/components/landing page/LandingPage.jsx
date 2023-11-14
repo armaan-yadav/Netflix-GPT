@@ -2,11 +2,14 @@ import React from "react";
 import Button from "../../utils/buttons/Button";
 import Header from "../header/Header";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
   const isSignedIn = useSelector((state) => state.user);
-  return (
+  const navigator = useNavigate();
+  return isSignedIn ? (
+    <>{navigator("/browse")}</>
+  ) : (
     <>
       <div
         className="h-[100vh] w-full bg-center  
